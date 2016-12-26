@@ -8,6 +8,9 @@ require_once("../model/DBUtils.php");
 $do = $_GET["do"];
 
 switch ($do){
+    case "type":
+        getNewsByType();
+        break;
     case "list":
         listNews();
         break;
@@ -30,6 +33,19 @@ function listNews(){
         echo json_encode($row)."#";
     }
 }
+
+//获取分类下的所有新闻
+function getNewsByType(){
+    $type = $_GET['type'];
+    //连接数据库
+    $conn = DBUtils::getConnection();
+    $sql = "select * from news where news_classification = $type";
+    $result = mysqli_query($conn,$sql);
+    while($row = mysqli_fetch_assoc($result)){
+        echo json_encode($row)."#";
+    }
+}
+
 
 function add(){
     //处理文件上传
@@ -76,7 +92,7 @@ function add(){
     }else{
         echo "操作失败";
     }
-    header("Location:http://localhost/PhpCrudDemo/tpl/admin.html");
+    header("Location:http://localhost/mbdnews/tpl/admin.html");
 }
 //删除
 function del(){
@@ -91,7 +107,7 @@ function del(){
     }else{
         echo "删除失败";
     }
-    header("Location:http://localhost/PhpCrudDemo/tpl/admin.html");
+    header("Location:http://localhost/mbdnews/tpl/admin.html");
 }
 
 function edit(){
